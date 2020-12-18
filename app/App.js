@@ -24,12 +24,9 @@ class App extends React.Component {
 
 
     render() {
-        console.log(this.state.tweets)
+        //console.log(this.state.tweets)
         return (
-            <div className="container">
-                <Login></Login>
-                
-            </div>
+            <Login/>
         )
     }
 }

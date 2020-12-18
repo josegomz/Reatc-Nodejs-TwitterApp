@@ -1,5 +1,5 @@
-import { React } from 'react';
-import { update } from 'immutability-helper';
+import React from 'react';
+import  update  from 'immutability-helper';
 import APIInvoker from './utils/APIInvoker';
 
 class Login extends React.Component {
@@ -16,16 +16,16 @@ class Login extends React.Component {
         let field = e.target.name
         let value = e.target.value
 
-        if (field == "username") {
-            value = value.replace(' ', '').replace('@', '').substring(0, 15)
+        if (field == 'username') {
+            value = value.replace(' ', '').replace('@', '').substring(0, 15)//el usuario no acepta espacios ni @
             this.setState(update(this.state, {
                 [field]: { $set: value }
             }))
+        } else {
+            this.setState(update(this.state, {//nombre o contaseña solo actualiza
+                [field]: { $set: value }
+            }))
         }
-
-        this.setState(update(this.state, {
-            [field]: { $set: value }
-        }))
     }
 
     login(e) {
@@ -48,8 +48,8 @@ class Login extends React.Component {
     }
 
     render() {
-
-        return (
+        //seccion de variables y lgica
+        return (//codigo JSX
             <div id="signup">
                 <div className="container" >
                     <div className="row">
@@ -73,12 +73,11 @@ class Login extends React.Component {
                         <label ref={self => this.passwordLabel = self}
                             htmlFor="passwordLabel"></label>
 
-                        <button className="btn btn-primary btn-lg " id="submitBtn"
-                            onClick={this.login.bind(this)}>Regístrate</button>
+                        <button className="btn btn-primary btn-lg " id="submitBtn" onClick={this.login.bind(this)}>Regístrate</button>
                         <label ref={self => this.submitBtnLabel = self}
                             id="submitBtnLabel" htmlFor="submitBtn"
                             className="shake animated hidden "></label>
-                        <p className="bg-danger user-est">Crea un usuario o usa el usuario
+                        <p className="alert alert-danger user-est">Crea un usuario o usa el usuario
                         <strong>test/test</strong></p>
                         <p>¿No tienes una cuenta? Registrate</p> </form>
                 </div>
