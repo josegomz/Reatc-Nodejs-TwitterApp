@@ -285,3 +285,47 @@ overflow: hidden;
     font-weight: bold;
     font-size: 18px;
 }
+/** SuggestedUsers Component **/
+#suggestedUsers{
+    padding: 10px;
+}
+#suggestedUsers .su-title{
+    font-size: 18px;
+    color: #66757f;
+    margin: 0px;
+}
+
+#suggestedUsers .sg-item{
+    padding: 5px 0px;
+}
+    
+#suggestedUsers .sg-item .su-avatar{
+    position: relative;
+}
+
+#suggestedUsers .sg-item .su-avatar img{
+    display: inline-block;
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    top: 3px;
+}
+
+#suggestedUsers .sg-item .sg-body{
+    position: relative;
+    display: block;
+    margin-left: 55px;
+}
+#suggestedUsers .sg-item .sg-body .sg-name{
+    color: #333;
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+#suggestedUsers .sg-item .sg-body .sg-username{
+}
+
+#suggestedUsers .sg-item .sg-body i{
+    color: #fafafa;
+}

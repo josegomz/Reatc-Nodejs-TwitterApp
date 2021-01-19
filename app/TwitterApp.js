@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router';
 import Signup from './Signup';
 import Login from './Login';
 import TweetsContainer from './TweetsContainer';
+import TwitterDashboard from './TwitterDashboard';
 
 class TwitterApp extends React.Component {
 
@@ -52,7 +53,7 @@ class TwitterApp extends React.Component {
                 <div id="mainApp" className="animate fadeIn">
                     <Switch>
                         <Route exact path="/" component={ () => 
-                            <TweetsContainer profile={this.state.profile}/> }/>
+                            <TwitterDashboard profile={this.state.profile}/> }/>
                         <Route exact path="/signup" component={Signup}/>
                         <Route exact path="/login" component={Login}/>
                     </Switch>
