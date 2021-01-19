@@ -17,19 +17,19 @@ const Profile = (props) => {
             <div className="profile-resumen">
                 <div className="container-fluid">
                     <div className="row">
-                        <div className="col-xs-3">
+                        <div className="col-3">
                             <Link to={`/${props.profile.userName}`}>
                                 <p className="profile-resumen-title">TWEETS</p>
                                 <p className="profile-resumen-value">{props.profile.tweetCount}</p>
                             </Link>
                         </div>
-                        <div className="col-xs-4">
+                        <div className="col-4">
                             <Link to={`/${props.profile.userName}/following`}>
                                 <p className="profile-resumen-title">SIGUIENDO</p>
                                 <p className="profile-resumen-value">{props.profile.following}</p>
                             </Link>
                         </div>
-                        <div className="col-xs-5">
+                        <div className="col-5">
                             <Link to={`/${props.profile.userName}/followers`}>
                                 <p className="profile-resumen-title">SEGUIDORES</p> 
                                 <p className="profile-resumen-value">{props.profile.followers}</p> 
@@ -43,6 +43,7 @@ const Profile = (props) => {
 }
 
 Profile.propTypes = {
-    profile: PropTypes.object.isRequired 62. }
+    profile: PropTypes.object.isRequired 
+}
 
 export default Profile;

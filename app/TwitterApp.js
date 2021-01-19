@@ -1,7 +1,7 @@
 import React from 'react'
 import APIInvoker from './utils/APIInvoker'
 import browserHistory from './History'
-import { Route, Switch } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 import Signup from './Signup';
 import Login from './Login';
 import TweetsContainer from './TweetsContainer';

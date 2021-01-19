@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import Tweet from './Tweet'
 import { tweets } from '../config'
 import InfiniteScroll from 'react-infinite-scroller'
+import update from 'immutability-helper'
+import Reply from './Reply';
 
 class TweetsContainer extends React.Component {
     constructor(props) {
@@ -37,24 +39,55 @@ class TweetsContainer extends React.Component {
         this.loadTweets(username, onlyUserTweet, page - 1)
     }
 
+    addNewTweet(newTweet) {
+        let oldState = this.state;
+        let newState = update(this.state, {
+            tweets: { $splice: [[0, 0, newTweet]] }
+        })
+
+        this.setState(newState)
+
+        //Optimistic Update
+        APIInvoker.invokePOST(
+            '/secure/tweet'
+            , newTweet, response => {
+                this.setState(update(this.state, {
+                    tweets: {
+                        0: {
+                            _id: { $set: response.tweet._id }
+                        }
+                    }
+                }))
+            }, error => {
+                console.log("Error al cargar los Tweets");
+                this.setState(oldState)
+            }
+        )
+    }
+
     render() {
+        let operations = {
+            addNewTweet: this.addNewTweet.bind(this)
+        }
         return (
             < main className="twitter-panel" >
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={this.loadMore}
-                    hasMore={this.state.hasMore}
-                    loader={<div className="loader" key={0}>Loading ...</div>} >
-
-                    < For each="tweet" of={this.state.tweets} >
-                        <Tweet key={tweets._id} tweet={tweet} />
-                    </For >
-                </InfiniteScroll>
-            </main >
+                <Choose>
+                    <When condition={this.props.onlyUserTweet} >
+                        <div className="tweet-container-header"> TweetsDD </div>
+                    </When>
+                    <Otherwise>
+                        <Reply profile={this.props.profile} operations={operations} />
+                    </Otherwise>
+                </Choose>
+                <If condition={this.state.tweets != null}>
+                    <For each="tweet" of={this.state.tweets}>
+                        <Tweet key={tweet._id} tweet={tweet} />
+                    </For>
+                </If>
+            </main>
         )
     }
 }
-
 TweetsContainer.propTypes = {
     onlyUserTweet: PropTypes.bool,
     profile: PropTypes.object
