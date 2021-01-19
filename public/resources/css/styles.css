@@ -195,3 +195,93 @@ body{
     color: red;
     margin-top: 20px;
 }
+/*componente perfil*/
+.twitter-panel{ 
+    background-color: #fff; 
+    background-clip: inherit; 
+    border: 1px solid #e6ecf0; 
+    border-radius: 5px; 
+    line-height: inherit;
+}
+
+#suggestedUsers,
+#profile{
+    max-width: 350px; 
+}
+
+#profile{
+    float: right; 
+    width: 100%; 
+    max-width: 350px;
+}
+
+#profile{
+overflow: hidden;
+}
+
+#profile .profile-banner{
+}
+
+#profile .profile-banner a{ 
+    min-height: 100px; 
+    background-size: cover; 
+    display: block;
+}
+
+#profile .profile-body{ 
+    position: relative; 
+    padding-top: 5px; 
+    padding-bottom: 10px;
+}
+
+#profile .profile-body img{ 
+    position: absolute; 
+    display: inline-block; 
+    border: 3px solid #fafafa; 
+    border-radius: 8px; height: 75px;
+    width: 75px; 
+    left: 10px; 
+    top: -30px;
+}
+#profile .profile-body > a{
+    margin-left: 90px;
+    color: inherit;
+}
+
+.profile-body > a:hover{
+    text-decoration: underline;
+}
+#profile .profile-resumen a {
+    color:#657786;
+}
+
+#profile .profile-resumen a:hover{
+    color: #1B95E0;
+}
+
+#profile .profile-resumen a .profile-resumen-title{
+    font-size: 10px;
+    margin: 0px;
+    color:inherit;
+    transition: 0.5s;
+}
+
+#profile .profile-resumen a .profile-resumen-value{
+    color: #1B95E0;
+    font-size: 18px;
+}
+
+#profile .profile-name,
+#profile .profile-username{
+    display: block;
+    margin: 0px;
+}
+
+#profile .profile-username{
+    color: #66757f;
+}
+
+#profile .profile-name{
+    font-weight: bold;
+    font-size: 18px;
+}
