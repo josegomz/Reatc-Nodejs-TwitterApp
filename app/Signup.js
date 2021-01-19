@@ -87,10 +87,11 @@ class Signup extends React.Component {
     render() {
         return (
             <div id="signup">
-                <div className="container" > <div className="row">
-                    <div className="col-xs-12">
+                <div className="container" >
+                    <div className="row">
+                        <div className="col-xs-12">
+                        </div>
                     </div>
-                </div>
                 </div>
                 <div className="signup-form">
                     <form onSubmit={this.signup.bind(this)}>
@@ -104,25 +105,25 @@ class Signup extends React.Component {
                             ref={self => this.usernameLabel = self} htmlFor="username">
                         </label>
                         <br />
-                        
+
                         <input type="text" value={this.state.name} placeholder="Nombre" name="name" id="name" onChange={this.handleInput.bind(this)} />
                         <label id="nameLabel" htmlFor="name"
                             ref={self => this.nameLabel = self}></label>
-                        
+
                         <input type="password" id="passwordLabel" value={this.state.password} placeholder="Contraseña" name="password" onChange={this.handleInput.bind(this)} />
                         <label ref={self => this.passwordLabel = self} htmlFor="passwordLabel"></label>
-                        
+
                         <input id="license" type="checkbox" ref={self => this.license = self}
                             value={this.state.license} name="license"
                             onChange={this.handleInput.bind(this)} />
                         <label htmlFor="license" > Acepto los terminos de licencia</label>
-                        
+
                         <button className="btn btn-primary btn-lg " id="submitBtn" onClick={this.signup.bind(this)}>Regístrate</button>
-                        
+
                         <label id="submitBtnLabel" htmlFor="submitBtn"
                             ref={self => this.submitBtnLabel = self}
                             className="shake animated hidden "></label>
-                        
+
                         <p className="alert alert-danger">Crea un usuario o usa el usuario <strong>test/test</strong></p>
                         <p>¿Ya tienes cuenta? Iniciar sesión</p>
                     </form>

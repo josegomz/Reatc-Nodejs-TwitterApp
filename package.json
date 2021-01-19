@@ -29,9 +29,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.4",
+    "history": "^4.10.1",
     "immutability-helper": "^3.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-infinite-scroller": "^1.2.4"
+    "react-infinite-scroller": "^1.2.4",
+    "react-router": "^5.1.2"
   }
 }

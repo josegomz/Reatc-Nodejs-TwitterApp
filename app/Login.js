@@ -79,7 +79,7 @@ class Login extends React.Component {
                             className="shake animated hidden "></label>
                         <p className="alert alert-danger user-est">Crea un usuario o usa el usuario
                         <strong>test/test</strong></p>
-                        <p>¿No tienes una cuenta? Registrate</p> </form>
+                        <p>¿No tienes una cuenta? <a href="/signup">Registrate</a></p> </form>
                 </div>
             </div>
         )

@@ -1,33 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
-import TweetsContainer from './TweetsContainer'
-import APIInvoker from './utils/APIInvoker'
-import Signup from './Signup';
-import Login from './Login';
+import TwitterApp from './TwitterApp'
+import { Router } from 'react-router'
+import history from './History'
 
-class App extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            tweets: []
-        }
-        APIInvoker.invokeGET('/tweets', response => {
-            this.setState({
-                tweets: response.body
-            })
-        }, error => {
-            console.log('Error al cargar los tweets')
-        })
-    }
-
-
-
-    render() {
-        //console.log(this.state.tweets)
-        return (
-            <Login/>
-        )
-    }
-}
-render(<App />, document.getElementById('root'));
+render((
+    <Router history={history}>
+        <TwitterApp></TwitterApp>
+    </Router>
+), document.getElementById('root'));
