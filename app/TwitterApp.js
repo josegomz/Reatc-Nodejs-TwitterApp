@@ -4,12 +4,13 @@ import browserHistory from './History'
 import { Route, Switch } from 'react-router-dom';
 import Signup from './Signup';
 import Login from './Login';
-import TweetsContainer from './TweetsContainer';
 import TwitterDashboard from './TwitterDashboard';
+import AuthRouter from './AuthRouter'
+import Toolbar from './Toolbar';
 
 class TwitterApp extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             load: false,
@@ -17,9 +18,9 @@ class TwitterApp extends React.Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let token = window.localStorage.getItem('token')
-        if(token == null){
+        if (token == null) {
             this.setState({
                 load: true,
                 profile: null
@@ -31,8 +32,8 @@ class TwitterApp extends React.Component {
                     load: true,
                     profile: response.profile
                 })
-                window.localStorage.setItem('token',response.token)
-                window.localStorage.setItem('username',response.profile.username)
+                window.localStorage.setItem('token', response.token)
+                window.localStorage.setItem('username', response.profile.username)
                 browserHistory.push('/')
             }, error => {
                 console.log('Error al autenticar al usuario')
@@ -43,19 +44,20 @@ class TwitterApp extends React.Component {
         }
     }
 
-    render(){
-        if(!this.state.load){
+    render() {
+        if (!this.state.load) {
             return null
         }
 
-        return(
+        return (
             <>
+                <Toolbar profile={this.state.profile} />
                 <div id="mainApp" className="animate fadeIn">
                     <Switch>
-                        <Route exact path="/" component={ () => 
-                            <TwitterDashboard profile={this.state.profile}/> }/>
-                        <Route exact path="/signup" component={Signup}/>
-                        <Route exact path="/login" component={Login}/>
+                        <Route exact path="/" component={() =>
+                            <TwitterDashboard profile={this.state.profile} />} />
+                        <Route exact path="/signup" component={Signup} />
+                        <Route exact path="/login" component={Login} />
                     </Switch>
                     <div id="dialog" />
                 </div>

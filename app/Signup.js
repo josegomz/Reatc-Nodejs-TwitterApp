@@ -1,6 +1,9 @@
 import React from 'react'
 import update from 'immutability-helper'
 import APIInvoker from './utils/APIInvoker'
+import { Link } from 'react-router-dom'
+import browserHistory from './History'
+
 
 class Signup extends React.Component {
     constructor() {
@@ -76,7 +79,7 @@ class Signup extends React.Component {
         }
 
         APIInvoker.invokePOST('/signup', request, response => {
-            alert('Usuario registrado correctamente')
+            browserHistory.push('/login');
         }, error => {
             console.log("Error al cargar los Tweets");
             this.submitBtnLabel.innerHTML = error.error
@@ -125,7 +128,7 @@ class Signup extends React.Component {
                             className="shake animated hidden "></label>
 
                         <p className="alert alert-danger">Crea un usuario o usa el usuario <strong>test/test</strong></p>
-                        <p>¿Ya tienes cuenta? Iniciar sesión</p>
+                        <p>¿Ya tienes cuenta? <Link to="/login">Iniciar Sesión</Link> </p>
                     </form>
                 </div>
             </div>

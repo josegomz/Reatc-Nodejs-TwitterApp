@@ -1,6 +1,7 @@
 import React from 'react';
 import  update  from 'immutability-helper';
 import APIInvoker from './utils/APIInvoker';
+import { Link } from 'react-router-dom';
 
 class Login extends React.Component {
 
@@ -79,7 +80,7 @@ class Login extends React.Component {
                             className="shake animated hidden "></label>
                         <p className="alert alert-danger user-est">Crea un usuario o usa el usuario
                         <strong>test/test</strong></p>
-                        <p>¿No tienes una cuenta? <a href="/signup">Registrate</a></p> </form>
+                        <p>¿No tienes una cuenta? <Link to="/signup">Registrate</Link> </p> </form>
                 </div>
             </div>
         )
