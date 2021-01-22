@@ -7,6 +7,7 @@ import Login from './Login';
 import TwitterDashboard from './TwitterDashboard';
 import AuthRouter from './AuthRouter'
 import Toolbar from './Toolbar';
+import UserPage from './UserPage';
 
 class TwitterApp extends React.Component {
 
@@ -33,7 +34,7 @@ class TwitterApp extends React.Component {
                     profile: response.profile
                 })
                 window.localStorage.setItem('token', response.token)
-                window.localStorage.setItem('username', response.profile.username)
+                window.localStorage.setItem('username', response.profile.userName)
                 browserHistory.push('/')
             }, error => {
                 console.log('Error al autenticar al usuario')
@@ -58,6 +59,7 @@ class TwitterApp extends React.Component {
                             <TwitterDashboard profile={this.state.profile} />} />
                         <Route exact path="/signup" component={Signup} />
                         <Route exact path="/login" component={Login} />
+                        <Route exact path="/:user" component={UserPage} />
                     </Switch>
                     <div id="dialog" />
                 </div>
