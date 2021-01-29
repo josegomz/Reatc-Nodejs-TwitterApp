@@ -1,7 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 class Tweet extends React.Component {
+    
+    constructor(props) {
+        super(props)
+        this.state = props.tweet
+        props.tweet.hola = "hola"
+    }
+
     render() {
         let tweet = this.props.tweet //variable local para el acceso mas simple
         let tweetClass = null //determinar las clases de estilo 
@@ -16,10 +24,14 @@ class Tweet extends React.Component {
                 <img src={tweet._creator.avatar} className="tweet-avatar" />
                 <div className="tweet-body">
                     <div className="tweet-user">
-                        <a href="#">
-                            <span className="tweet-name" data-ignore-onclick>{tweet._creator.name}</span>
-                        </a>
-                        <span className="tweet-username">@{tweet._creator.userName}</span>
+                        <Link to={`/${this.state._creator.userName}`}>
+                            <span className="tweet-name" data-ignore-onclick>
+                                {this.state._creator.name}
+                            </span>
+                        </Link>
+                        <Link to={`/${this.state._creator.userName}`}>
+                            <span className="tweet-username">@{this.state._creator.userName}</span>
+                        </Link>
                     </div>
                     <p className="tweet-message">{tweet.message}</p>
                     <If condition={tweet.image != null}>
@@ -28,12 +40,12 @@ class Tweet extends React.Component {
                     <div className="tweet-footer">
                         <a className={tweet.liked ? 'like-icon liked' : 'like-icon'} data-ignore-onclick>
                             <i className="fa fa-heart" aria-hidden="true" data-ignore-onclick></i>
-                            {tweet.likeCounter} 
+                            {tweet.likeCounter}
                         </a>
                         <If condition={!this.props.detail} >
                             <a className="reply-icon" data-ignore-onclick>
                                 <i className="fa fa-reply " aria-hidden="true" data-ignore-onclick></i> {tweet.replys}
-                            </a> 
+                            </a>
                         </If>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import update from 'immutability-helper'
 import APIInvoker from './utils/APIInvoker'
 import { NavLink } from 'react-router-dom'
@@ -22,13 +22,26 @@ class UserPage extends React.Component {
 
     componentDidMount() {
         let user = this.props.match.params.user
+        this.getUserProfile(user)
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        let newProfile = this.props.match.params.user
+        let prevProfile = prevProps.match.params.user
+        if (newProfile != prevProfile) {
+            this.getUserProfile(newProfile)
+        }
+    }
+
+    getUserProfile(user) {
         APIInvoker.invokeGET('/profile/' + user, response => {
             this.setState({
                 edit: false,
                 profile: response.body
             });
         }, error => {
-            console.log("Error al cargar los Tweets"); window.location = '/'
+            console.log("Error al cargar los Tweets");
+            window.location = '/'
         }
         )
     }

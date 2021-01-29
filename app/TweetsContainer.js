@@ -20,6 +20,20 @@ class TweetsContainer extends React.Component {
         this.loadTweets(username, onlyUserTweet)
         this.loadMore = this.loadMore.bind(this)
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) { 
+        let prevUser = prevProps.profile.userName
+        let newUser = this.props.profile.userName
+
+        let prevUserTweet = prevProps.onlyUserTweet 
+        let newUserTweet = this.props.onlyUserTweet
+        
+        if (newUserTweet != prevUserTweet || prevUser != newUser) { 
+            let onlyUserTweet = this.props.onlyUserTweet 
+            this.loadTweets(newUser, onlyUserTweet, 0)
+        }
+    }
+
     loadTweets(username, onlyUserTweet, page) {
         let currentPage = page || 0
         let url = '/tweets' + (onlyUserTweet ? "/" + username : "")
