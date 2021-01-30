@@ -1,9 +1,12 @@
 import React from 'react'
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import update from 'immutability-helper'
 import APIInvoker from './utils/APIInvoker'
 import { NavLink } from 'react-router-dom'
 import MyTweets from './MyTweets'
+import Followers from './Followers';
+import Followings from './Followings';
+
 
 class UserPage extends React.Component {
     constructor(props) {
@@ -250,7 +253,14 @@ class UserPage extends React.Component {
                             </aside>
                         </div>
                         <div className="col-xs-12 col-sm-8 col-md-7col-md-push-1 col-lg-7">
-                            <Route exact path="/:user" component={() => <MyTweets profile={this.state.profile} />} />
+                            <Switch>
+                                <Route exact path="/:user" component={
+                                    () => <MyTweets profile={this.state.profile} />} />
+                                <Route exact path="/:user/followers" component={
+                                    () => <Followers profile={this.state.profile} />} />
+                                <Route exact path="/:user/following" component={
+                                    () => <Followings profile={this.state.profile} />} />
+                            </Switch>
                         </div>
                     </div>
                 </div>
