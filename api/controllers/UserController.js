@@ -1,6 +1,8 @@
 var authService = require('../services/AuthService')
 var Profile = require('../models/Profile')
 var bcrypt = require('bcryptjs')
+var configuration = require('../../config')
+var jwt = require('jsonwebtoken')
 
 
 // Servicio para crear un nuevo usuario
@@ -161,11 +163,191 @@ const getSuggestedUser = async (req, res, err) => {
     }
 }
 
+// Servicio que consulta el perfil de un usuario por medio de su nombre de usuario
+const getProfileByUsername = async (req, res, err) => {
+    try {
+        const user = req.params.user
+
+        if (user === null) throw new Error("parametro 'user' requerido")
+        let profile = await Profile.findOne({ userName: user })
+        if (profile === null) throw new Error("Usuario no existe")
+        var token = req.headers['authorization'] || ''
+        token = token.replace('Bearer ', '')
+
+        //Validate token
+        let userToken = await jwt.verify(token, configuration.jwt.secret)
+        // Validate if the user profile is follower
+        let follow = profile.followersRef.find(x => x.toString() === userToken.id.toString()) != null
+        // Return user profile
+        res.send({
+            ok: true,
+            body: {
+                _id: profile._id,
+                name: profile.name,
+                description: profile.description,
+                userName: profile.userName,
+                avatar: profile.avatar || '/public/resources/avatars/0.png',
+                banner: profile.banner || '/public/resources/banners/4.png',
+                tweetCount: profile.tweetCount,
+                following: profile.following,
+                followers: profile.followers,
+                follow: follow
+            }
+        })
+    } catch (error) {
+        res.send({
+            ok: false,
+            message: error.message || "parametro 'user' requerido"
+        })
+    }
+}
+// Servicio utilizado para actualizar el perfil del usuario
+const updateProfile = async (req, res, err) => {
+    let username = req.user.username
+
+    try {
+        const updates = {
+            name: req.body.name,
+            description: req.body.description,
+            avatar: req.body.avatar,
+            banner: req.body.banner
+        }
+
+        let response = await Profile.updateOne({ userName: username }, updates)
+        res.send({
+            ok: true
+        })
+    } catch (error) {
+        res.send({
+            ok: false,
+            message: error.message || "Error al actualizar el perfil"
+        })
+    }
+
+}
+
+// Servicio que consulta todos los seguidores
+const getFollower = async (req, res, err) => {
+    let username = req.params.user
+
+    try {
+        let followers = await Profile.findOne({ userName: username })
+            .populate("followersRef")
+        if (followers === null) throw new Error("No existe el usuario")
+
+        let response = followers.followersRef.map(x => {
+            return {
+                _id: x._id,
+                userName: x.userName,
+                name: x.name,
+                description: x.description,
+                avatar: x.avatar || '/public/resources/avatars/0.png',
+                banner: x.banner || '/public/resources/banners/4.png'
+            }
+        })
+        res.send({
+            ok: true,
+            body: response
+        })
+    } catch (error) {
+        res.send({
+            ok: false,
+            message: error.message || "Error al consultara los seguidores",
+        })
+    }
+}
+
+// Servicio para consultar a los usuarios que seguimos
+const getFollowing = async (req, res, err) => {
+    let username = req.params.user
+
+    try {
+        let followings = await Profile.findOne({ userName: username })
+            .populate("followingRef")
+
+        if (followings === null) throw new Error("No existe el usuario")
+
+        let response = followings.followingRef.map(x => {
+            return {
+                _id: x._id,
+                userName: x.userName,
+                name: x.name,
+                description: x.description,
+                avatar: x.avatar || '/public/resources/avatars/0.png',
+                banner: x.banner || '/public/resources/banners/4.png'
+            }
+        })
+
+        res.send({
+            ok: true,
+            body: response
+        })
+
+    } catch (error) {
+        res.send({
+            ok: false,
+            message: error.message || "Error al consultara los seguidores",
+        })
+    }
+}
+
+// Servicio que permite comenzar a seguir a otro usuario
+const follow = async (req, res, err) => {
+    let username = req.user.username
+    let followingUser = req.body.followingUser
+    let session
+
+    try {
+        session = await mongoose.startSession()
+        session.startTransaction()
+
+        // Find the two profiles
+        let users = await Profile.find({ userName: { $in: [username, followingUser] } })
+
+        if (users.length != 2) throw { message: "El usuario no existe" }
+        let my = users.find(x => x.userName == username)
+        let other = users.find(x => x.userName == followingUser)
+        let following = my.followingRef.find(x => x.toString() === other._id.toString()) != null
+        let myUpdate = null
+        let otherUpdate = null
+        if (following) {
+            myUpdate = { $pull: { followingRef: other._id } }
+            otherUpdate = { $pull: { followersRef: my._id } }
+        } else {
+            myUpdate = { $push: { followingRef: other._id } }
+            otherUpdate = { $push: { followersRef: my._id } }
+        }
+
+        let myUp = await Profile.updateOne({ userName: my.userName }, myUpdate, { session })
+        let otherUp = await Profile.updateOne({ userName: other.userName }, otherUpdate, { session })
+
+        res.send({
+            ok: true,
+            unfollow: following,
+        })
+
+        session.commitTransaction()
+    } catch (err) {
+        console.log("error => ", err.message)
+        session.abortTransaction()
+        res.send({
+            ok: false,
+            message: err.message || "Error al ejecutar la operación",
+        })
+    }
+}
+
+
 
 module.exports = {
     usernameValidate,
     signup,
     login,
     relogin,
-    getSuggestedUser
+    getSuggestedUser,
+    getProfileByUsername,
+    updateProfile,
+    getFollowing,
+    getFollower,
+    follow
 }
