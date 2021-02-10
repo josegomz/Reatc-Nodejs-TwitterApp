@@ -79,7 +79,7 @@ class Login extends React.Component {
                         <label ref={self => this.passwordLabel = self}
                             htmlFor="passwordLabel"></label>
 
-                        <button className="btn btn-primary btn-lg " id="submitBtn" onClick={this.login.bind(this)}>Regístrate</button>
+                        <button className="btn btn-primary btn-lg " id="submitBtn" onClick={this.login.bind(this)}>Ingresar</button>
                         <label ref={self => this.submitBtnLabel = self}
                             id="submitBtnLabel" htmlFor="submitBtn"
                             className="shake animated hidden "></label>

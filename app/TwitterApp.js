@@ -1,6 +1,4 @@
 import React from 'react'
-import APIInvoker from './utils/APIInvoker'
-import browserHistory from './History'
 import { Route, Switch } from 'react-router-dom';
 import Signup from './Signup';
 import Login from './Login';
@@ -8,9 +6,11 @@ import TwitterDashboard from './TwitterDashboard';
 import AuthRoute from './AuthRouter'
 import Toolbar from './Toolbar';
 import UserPage from './UserPage';
-import UserCard from './UserCard';
 import UserContext from './context/UserContext';
 import useLogin from './hooks/useLogin';
+import { Provider } from 'react-redux'
+import store from './redux/store'
+
 
 const TwitterApp = (props) => {
 
@@ -21,6 +21,7 @@ const TwitterApp = (props) => {
 
         return (
             <UserContext.Provider value={user}>
+                <Provider store={store} >
                 <Toolbar />
                 <div id="mainApp" className="animate fadeIn">
                     <Switch>
@@ -31,6 +32,7 @@ const TwitterApp = (props) => {
                     </Switch>
                     <div id="dialog" />
                 </div>
+                </Provider>
             </UserContext.Provider>
         )
     }

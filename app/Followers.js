@@ -3,17 +3,17 @@ import UserCard from './UserCard';
 import APIInvoker from './utils/APIInvoker';
 import PropTypes from 'prop-types';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+import { useDispatch, useSelector } from 'react-redux'
+import { loadFollowers } from './redux/actions/userPageActions'
 
 const Followers = (props) => {
-    const [state, setState] = useState([])
 
+    const dispath = useDispatch()
+    const state = useSelector(state => state.userPage.followers)
     useEffect(() => {
-        let username = props.profile.userName
-        APIInvoker.invokeGET(`/followers/${username}`, response => {
-            setState(response.body)
-        }, error => {
-            console.log("Error en la autenticación");
-        })
+        if (state === null) {
+             dispath(loadFollowers())
+        }
     }, [props.profile.userName]
     )
     return (
