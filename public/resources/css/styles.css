@@ -1,5 +1,12 @@
+/*personalización*/
 body{
-    background-color: #F5F8FA;
+    background-color: #7ea0b8;
+}
+.navbar {
+    background-color: #262539 !important;
+}
+a{
+
 }
 
 /* */
