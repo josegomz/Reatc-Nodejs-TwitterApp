@@ -6,6 +6,7 @@ import history from './History'
 
 render((
     <Router history={history}>
+        <div id="dialog"/>
         <TwitterApp></TwitterApp>
     </Router>
 ), document.getElementById('root'));

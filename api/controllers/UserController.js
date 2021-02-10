@@ -1,9 +1,10 @@
+
 var authService = require('../services/AuthService')
 var Profile = require('../models/Profile')
 var bcrypt = require('bcryptjs')
-var configuration = require('../../config')
+var configuration = require('../../serverConfig')
 var jwt = require('jsonwebtoken')
-
+var mongoose = require('mongoose')
 
 // Servicio para crear un nuevo usuario
 const signup = async (req, res, err) => {
@@ -42,10 +43,17 @@ const signup = async (req, res, err) => {
     }
 }
 
+// Servicio que valida la disponibilidad de un nombre de usuario
 const usernameValidate = async (req, res, err) => {
+
     try {
+        // find if exist some profile with the same username
         let profiles = await Profile.find().byUsername(req.params.username.toLowerCase())
+
+        //If the profiles list is not empty, the username is taken by other user
         if (profiles.length > 0) throw new Error("Usuario existente")
+
+        // Confirm to the username is available
         res.send({
             ok: true,
             message: "Usuario disponible"
@@ -130,6 +138,7 @@ const relogin = async (req, res, err) => {
         })
     }
 }
+
 // Servicio que consulta usuarios sugeridos para seguir
 const getSuggestedUser = async (req, res, err) => {
     let user = req.user
@@ -165,19 +174,27 @@ const getSuggestedUser = async (req, res, err) => {
 
 // Servicio que consulta el perfil de un usuario por medio de su nombre de usuario
 const getProfileByUsername = async (req, res, err) => {
-    try {
-        const user = req.params.user
+    let user = req.params.user
 
+    try {
         if (user === null) throw new Error("parametro 'user' requerido")
+
+        // Find profile by username
         let profile = await Profile.findOne({ userName: user })
+
+        //if the user dont exist, throw error
         if (profile === null) throw new Error("Usuario no existe")
+
+        // Retrieve token from the header request
         var token = req.headers['authorization'] || ''
         token = token.replace('Bearer ', '')
 
         //Validate token
         let userToken = await jwt.verify(token, configuration.jwt.secret)
+
         // Validate if the user profile is follower
         let follow = profile.followersRef.find(x => x.toString() === userToken.id.toString()) != null
+
         // Return user profile
         res.send({
             ok: true,
@@ -201,6 +218,7 @@ const getProfileByUsername = async (req, res, err) => {
         })
     }
 }
+
 // Servicio utilizado para actualizar el perfil del usuario
 const updateProfile = async (req, res, err) => {
     let username = req.user.username
@@ -337,8 +355,6 @@ const follow = async (req, res, err) => {
     }
 }
 
-
-
 module.exports = {
     usernameValidate,
     signup,
@@ -347,7 +363,7 @@ module.exports = {
     getSuggestedUser,
     getProfileByUsername,
     updateProfile,
-    getFollowing,
     getFollower,
+    getFollowing,
     follow
 }

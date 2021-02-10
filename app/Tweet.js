@@ -1,14 +1,45 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import browserHistory from './History'
+import update from 'immutability-helper'
+
+import APIInvoker from './utils/APIInvoker'
+
 
 class Tweet extends React.Component {
-    
+
     constructor(props) {
         super(props)
         this.state = props.tweet
         props.tweet.hola = "hola"
     }
+
+    handleClick(e) {
+        if (this.props.detail || e.target.getAttribute("data-ignore-onclick")) {
+            return
+        }
+        let url = "/" + this.state._creator.userName + "/" + this.state._id
+        browserHistory.push(url)
+    }
+
+    handleLike(e) {
+        e.preventDefault()
+        let request = {
+            tweetID: this.state._id,
+            like: !this.state.liked
+        }
+        APIInvoker.invokePOST('/secure/like', request, response => {
+            let newState = update(this.state, {
+                likeCounter: { $set: response.body.likeCounter },
+                liked: { $apply: (x) => { return !x } }
+            })
+            this.setState(newState)
+        }, error => {
+            console.log("Error al cargar los Tweets", error);
+        })
+    }
+
 
     render() {
         let tweet = this.props.tweet //variable local para el acceso mas simple
@@ -20,7 +51,7 @@ class Tweet extends React.Component {
         }
 
         return (
-            <article className={tweetClass} id={'tweet-' + tweet._id}>
+            <article className={tweetClass} id={'tweet-' + tweet._id} onClick={this.props.detail ? '' : this.handleClick.bind(this)}>
                 <img src={tweet._creator.avatar} className="tweet-avatar" />
                 <div className="tweet-body">
                     <div className="tweet-user">
@@ -38,7 +69,7 @@ class Tweet extends React.Component {
                         <img className="tweet-img" src={tweet.image} />
                     </If>
                     <div className="tweet-footer">
-                        <a className={tweet.liked ? 'like-icon liked' : 'like-icon'} data-ignore-onclick>
+                        <a className={tweet.liked ? 'like-icon liked' : 'like-icon'} onClick={this.handleLike.bind(this)} data-ignore-onclick>
                             <i className="fa fa-heart" aria-hidden="true" data-ignore-onclick></i>
                             {tweet.likeCounter}
                         </a>

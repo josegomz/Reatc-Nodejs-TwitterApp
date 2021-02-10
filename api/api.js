@@ -47,12 +47,21 @@ router.get('/', function (req, res) {
 //private access services 
 router.get('/secure/relogin',userController.relogin)
 router.get('/secure/suggestedUsers',userController.getSuggestedUser)
+router.put('/secure/profile', userController.updateProfile)
+router.post('/secure/follow', userController.follow)
+router.post('/secure/tweet', tweetController.addTweet)
+router.post('/secure/like', tweetController.like)
 
 //Public access services
+router.get('/tweets/:user', tweetController.getUserTweets)
 router.get('/tweets',tweetController.getNewTweets)
 router.get('/usernameValidate/:username', userController.usernameValidate)
+router.get('/profile/:user',userController.getProfileByUsername)
 router.post('/signup', userController.signup)
 router.post('/login', userController.login)
+router.get('/followings/:user',userController.getFollowing)
+router.get('/followers/:user',userController.getFollower)
+router.get('/tweetDetails/:tweet', tweetController.getTweetDetails )
 
 
 router.get('/*', function (req, res, err) {

@@ -1,24 +1,23 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link ,NavLink} from 'react-router-dom'
 import PropTypes from 'prop-types'
+import UserContext from './context/UserContext'
 
-class Toolbar extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {}
-    }
 
-    logout(e) {
+const Toolbar = (props) => {
+
+    const userContext = useContext(UserContext)
+
+    const logout = (e) => {
         e.preventDefault()
         window.localStorage.removeItem("token")
         window.localStorage.removeItem("username")
         window.location = '/login';
     }
 
-    render() {
 
-        return (
-            <nav className="navbar navbar-default fixed-top pb-5">
+    return (
+        <nav className="navbar navbar-default fixed-top pb-5">
                 <span className="visible-xs bs-test">XS</span>
                 <span className="visible-sm bs-test">SM</span>
                 <span className="visible-md bs-test">MD</span>
@@ -43,20 +42,22 @@ class Toolbar extends React.Component {
                         </div>
 
                     </div>
-                    <If condition={this.props.profile != null} >
+                    <If condition={userContext != null} >
                         <div className="nav navbar-nav navbar-right">
                             <div className="dropdown">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img className="navbar-avatar" src={this.props.profile.avatar} alt={this.props.profile.userName} />
+                                    <img className="navbar-avatar" 
+                                    src={userContext.avatar} 
+                                    alt={userContext.userName} />
                                 </a>
                                 <div className="dropdown-menu dropdown-menu-right text-right">
                                     <li className="dropdown-item">
-                                        <Link to={`/${this.props.profile.userName}`}>
+                                        <Link to={`/${userContext.userName}`}>
                                             Ver perfil</Link>
                                     </li>
                                     <li role="separator" className="divider"></li>
                                     <li className="dropdown-item">
-                                        <Link to="#" onClick={this.logout.bind(this)}>
+                                        <Link to="#" onClick={logout}>
                                             Cerrar sesión</Link>
                                     </li>
                                 </div>
@@ -65,10 +66,7 @@ class Toolbar extends React.Component {
                     </If>
                 </div>
             </nav>
-        )
-    }
+    )
 }
-Toolbar.propTypes = {
-    profile: PropTypes.object
-}
+
 export default Toolbar

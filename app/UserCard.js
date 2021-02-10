@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 const UserCard = ({ user }) => {
     return (
         <article className="user-card">
-            <header className="user-card-banner" style={{ backgroundImage: 'url(' + user.banner + ')' }}>
+            <header className="user-card-banner" 
+            style={{ backgroundImage: 'url(' + user.banner + ')' }}>
                 <img src={user.avatar} className="user-card-avatar" />
 
             </header>
