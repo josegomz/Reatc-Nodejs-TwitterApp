@@ -1,6 +1,7 @@
 module.exports = {
     server: {
-        port: 8080
+        port: 80,
+        securePort: 443
     },
     mongodb: {
         connectionString: "mongodb+srv://twitter:root@mini-twitter.t5vun.mongodb.net/test"

@@ -298,10 +298,31 @@ const getTweetDetails = async (req, res, err) => {
     }
 }
 
+const getTweetImage = async (req, res, err) => {
+    try {
+        let tweetId = req.params.tweet
+        let tweet = await Tweet.findOne({ _id: tweetId })
+
+        let image = tweet.image //data:image/jpeg; 
+        if (image) {
+            let mimeType = image.split(";")[0].split(":")[0]
+            res.header('Content-Type', 'image/jpeg')
+        }
+        res.send(tweet.image)
+    } catch (error) {
+        console.log("error =>")
+        res.send({
+            ok: false,
+            message: error.message || "Error al cargar la imagen"
+        })
+    }
+}
+
 module.exports = {
     getNewTweets,
     getUserTweets,
     addTweet,
     like,
-    getTweetDetails
+    getTweetDetails,
+    getTweetImage
 }
